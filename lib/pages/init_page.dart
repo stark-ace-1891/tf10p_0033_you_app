@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tf10p_0033_you_app/ui/general/colors.dart';
 
 class InitPage extends StatefulWidget {
   const InitPage({super.key});
@@ -40,9 +41,48 @@ class _InitPageState extends State<InitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBrandPrimaryColor,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: kBrandPrimaryColor,
+        title: Image.asset(
+          'lib/assets/images/logo.png',
+          height: 26,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.cast),
+            color: Colors.white,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.notifications_none),
+            color: Colors.white,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.notifications_none),
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          CircleAvatar(
+            backgroundColor: Colors.white12,
+            radius: 14,
+            backgroundImage: NetworkImage(
+              "https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            ),
+          ),
+          SizedBox(
+            width: 12,
+          ),
+        ],
+      ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff212121),
+        backgroundColor: kBrandPrimaryColor,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         selectedFontSize: 12,
