@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tf10p_0033_you_app/services/api_service.dart';
 import 'package:tf10p_0033_you_app/ui/general/colors.dart';
 import 'package:tf10p_0033_you_app/ui/widgets/item_filter_widget.dart';
 import 'package:tf10p_0033_you_app/ui/widgets/item_vide_widget.dart';
 
 class HomPage extends StatelessWidget {
-  const HomPage({super.key});
+  
+  final ApiService _apiSercice = ApiService();
 
   @override
   Widget build(BuildContext context) {
+
+    _apiSercice.getVideos();
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
