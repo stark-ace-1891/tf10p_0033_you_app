@@ -23,7 +23,6 @@ class _HomPageState extends State<HomPage> {
   getData() {
     _apiSercice.getVideos().then((value) {
       videos = value;
-      print(videos);
       setState(() {});
     });
   }

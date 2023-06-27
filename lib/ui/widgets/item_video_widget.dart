@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:tf10p_0033_you_app/models/channel_model.dart';
 import 'package:tf10p_0033_you_app/models/video_model.dart';
+import 'package:tf10p_0033_you_app/services/api_service.dart';
 
-class ItemVideoWidget extends StatelessWidget {
+class ItemVideoWidget extends StatefulWidget {
   VideoModel videoModel;
 
   ItemVideoWidget({
     required this.videoModel,
   });
+
+  @override
+  State<ItemVideoWidget> createState() => _ItemVideoWidgetState();
+}
+
+class _ItemVideoWidgetState extends State<ItemVideoWidget> {
+  ChannelModel? channel;
+  final ApiService _apiService = ApiService();
+
+  @override
+  initState() {
+    super.initState();
+    getData(widget.videoModel);
+    setState(() {});
+  }
+
+  getData(VideoModel videoModel) {
+    _apiService.getChannel(videoModel.snippet.channelId).then((value) {
+      channel = value;
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +44,7 @@ class ItemVideoWidget extends StatelessWidget {
           Stack(
             children: [
               Image.network(
-                videoModel.snippet.thumbnails.high.url,
+                widget.videoModel.snippet.thumbnails.high.url,
                 width: double.infinity,
                 height: height * 0.3,
                 fit: BoxFit.cover,
@@ -52,7 +76,7 @@ class ItemVideoWidget extends StatelessWidget {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(
-              videoModel.snippet.title,
+              widget.videoModel.snippet.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -61,7 +85,7 @@ class ItemVideoWidget extends StatelessWidget {
               ),
             ),
             subtitle: Text(
-              "${videoModel.snippet.channelTitle} · 6.5 M de vistas · hace 2 años",
+              "${widget.videoModel.snippet.channelTitle} · 6.5 M de vistas · hace 2 años",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -69,11 +93,11 @@ class ItemVideoWidget extends StatelessWidget {
                 fontSize: 13,
               ),
             ),
-            leading: CircleAvatar(
+            leading: channel != null ? CircleAvatar(
               backgroundColor: Colors.white12,
-              backgroundImage: NetworkImage(
-                  "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
-            ),
+              backgroundImage:
+                  NetworkImage(channel!.snippet.thumbnails.high.url),
+            ) : CircularProgressIndicator(),
             trailing: Column(
               children: [
                 Container(
