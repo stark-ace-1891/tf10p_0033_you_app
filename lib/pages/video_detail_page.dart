@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tf10p_0033_you_app/models/video_model.dart';
+import 'package:tf10p_0033_you_app/services/api_service.dart';
 import 'package:tf10p_0033_you_app/ui/general/colors.dart';
 import 'package:tf10p_0033_you_app/ui/widgets/item_video_detail_widget.dart';
+import 'package:tf10p_0033_you_app/ui/widgets/item_video_widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoDetailPage extends StatefulWidget {
@@ -13,11 +16,14 @@ class VideoDetailPage extends StatefulWidget {
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
+  final ApiService _apiSercice = ApiService();
+  List<VideoModel> videos = [];
   late YoutubePlayerController _playerController;
 
   @override
   void initState() {
     super.initState();
+    getData();
     _playerController = YoutubePlayerController(
       initialVideoId: widget.videoId,
       flags: YoutubePlayerFlags(
@@ -28,8 +34,16 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     );
   }
 
+  getData() {
+    _apiSercice.getVideos().then((value) {
+      videos = value;
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _apiSercice.getVideos();
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: kBrandPrimaryColor,
@@ -151,17 +165,15 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   Divider(
                     color: Colors.white24,
                   ),
-                  Container(
-                    height: 200,
-                    color: Colors.indigo,
-                  ),
-                  Container(
-                    height: 200,
-                    color: Colors.yellow,
-                  ),
-                  Container(
-                    height: 200,
-                    color: Colors.red,
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemCount: videos.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ItemVideoWidget(
+                        videoModel: videos[index],
+                      );
+                    },
                   ),
                 ],
               ),
