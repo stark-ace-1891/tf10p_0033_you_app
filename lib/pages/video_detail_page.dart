@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tf10p_0033_you_app/models/video_model.dart';
+import 'package:tf10p_0033_you_app/pages/channel_page.dart';
 import 'package:tf10p_0033_you_app/services/api_service.dart';
 import 'package:tf10p_0033_you_app/ui/general/colors.dart';
 import 'package:tf10p_0033_you_app/ui/widgets/item_video_detail_widget.dart';
@@ -123,6 +124,14 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                     color: Colors.white24,
                   ),
                   ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChannelPage(),
+                        ),
+                      );
+                    },
                     leading: CircleAvatar(
                       backgroundColor: Colors.white24,
                       backgroundImage: NetworkImage(
