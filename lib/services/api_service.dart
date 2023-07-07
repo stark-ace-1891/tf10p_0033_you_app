@@ -9,7 +9,7 @@ class ApiService {
   Future<List<VideoModel>> getVideos() async {
     List<VideoModel> videosModel = [];
     String _path =
-        "$pathProduction/search?part=snippet&key=$apiKey&maxResults=50&regionCode=PE";
+        "$pathProduction/search?part=snippet&key=$apiKey&maxResults=10&regionCode=PE";
     Uri _uri = Uri.parse(_path);
 
     http.Response response = await http.get(_uri);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tf10p_0033_you_app/models/channel_model.dart';
 import 'package:tf10p_0033_you_app/models/video_model.dart';
 import 'package:tf10p_0033_you_app/pages/channel_page.dart';
 import 'package:tf10p_0033_you_app/services/api_service.dart';
@@ -8,25 +9,26 @@ import 'package:tf10p_0033_you_app/ui/widgets/item_video_widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoDetailPage extends StatefulWidget {
-  String videoId;
+  VideoModel videoModel;
 
-  VideoDetailPage({required this.videoId});
+  VideoDetailPage({required this.videoModel});
 
   @override
   State<VideoDetailPage> createState() => _VideoDetailPageState();
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
-  final ApiService _apiSercice = ApiService();
+  final ApiService _apiService = ApiService();
   List<VideoModel> videos = [];
   late YoutubePlayerController _playerController;
+  ChannelModel? channel;
 
   @override
   void initState() {
     super.initState();
     getData();
     _playerController = YoutubePlayerController(
-      initialVideoId: widget.videoId,
+      initialVideoId: widget.videoModel.id.videoId,
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
@@ -36,15 +38,22 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   }
 
   getData() {
-    _apiSercice.getVideos().then((value) {
+    _apiService.getVideos().then((value) {
       videos = value;
       setState(() {});
     });
   }
 
+  getChannel(VideoModel videoModel) {
+    _apiService.getChannel(videoModel.snippet.channelId).then((value) {
+      channel = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    _apiSercice.getVideos();
+    getChannel(widget.videoModel);
+    getData();
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: kBrandPrimaryColor,
@@ -64,7 +73,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           ),
           ListTile(
             title: Text(
-              "Lorem dsasd asd as  sadasd as d asd sad as d as d sadasdasdasd asd asdas d asd Lorem dsasd asd as  sadasd as d asd sad as d as d sadasdasdasd asd asdas d asd Lorem dsasd asd as  sadasd as d asd sad as d as d sadasdasdasd asd asdas d asd Lorem dsasd asd as  sadasd as d asd sad as d as d sadasdasdasd asd asdas d asd Lorem dsasd asd as  sadasd as d asd sad as d as d sadasdasdasd asd asdas d asd",
+              widget.videoModel.snippet.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -132,13 +141,13 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                         ),
                       );
                     },
-                    leading: CircleAvatar(
+                    leading: channel != null ? CircleAvatar(
                       backgroundColor: Colors.white24,
                       backgroundImage: NetworkImage(
-                          "https://images.pexels.com/photos/598917/pexels-photo-598917.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
-                    ),
+                          channel!.snippet.thumbnails.high.url),
+                    ) : CircularProgressIndicator(),
                     title: Text(
-                      "dsfsdf dsfsdfsd sdfsdfsdf dsfsdf",
+                      widget.videoModel.snippet.channelTitle,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

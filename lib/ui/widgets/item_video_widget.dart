@@ -41,7 +41,7 @@ class _ItemVideoWidgetState extends State<ItemVideoWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => VideoDetailPage(videoId: widget.videoModel.id.videoId),
+            builder: (context) => VideoDetailPage(videoModel: widget.videoModel),
           ),
         );
       },
